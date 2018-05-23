@@ -1,0 +1,109 @@
+// YAO parameter file
+
+
+//-------------------------------
+sim.name           = "SH_trial1";
+sim.pupildiam      = 128; //256
+sim.debug          = 0;
+sim.verbose        = 0;
+
+//-------------------------------
+
+atm.dr0at05mic     = 42.44; 
+atm.screen	   = &("/home/usg/Desktop/Ulas_Yao_Works/"+"screen4096_"+["1","2","3","4","5","6","7","8","9"]+".fits"); //
+atm.layerfrac      = &([0.5328,0.0145,0.035,0.0957,0.1083,0.0437,0.0658,0.0371,0.0671]);
+atm.layerspeed     = &([15,13,13,9,9,15,25,40,21]);
+atm.layeralt	   = &([48.,162,324,649,1299,2598,5196,10392,20785]);
+atm.winddir        = &([0,10,340,30,300,290,280,90,0]);
+
+//-------------------------------
+tel.diam	   = 3.94;
+tel.cobs	   = 0.247462;
+
+//-------------------------------
+nwfs               = 1; 
+wfs = array(wfss,nwfs);
+
+n   = 1;
+wfs(n).type	   = "hartmann";
+wfs(n).lambda	   = 0.50;
+wfs(n).gspos       = [0.,0.];
+wfs(n).gsalt       = 0.;
+//wfs(n).gsmag       = 1.; //
+wfs(n).shmethod	   = 2;
+
+wfs(n).shnxsub   = 10; //4 8 10 12 16
+wfs(n).npixpersub  = sim.pupildiam/wfs(n).shnxsub;
+
+wfs(n).pixsize     = 0.15; //0.02127; //0.15; //0.40; 
+wfs(n).npixels     = 128;
+
+wfs(n).noise       = 1;
+wfs(n).ron         = 1.0; //2.0, 3.0
+wfs(n).shthreshold = 0.;
+wfs(n).nintegcycles= 1;
+wfs(n).pupoffset   = 0.;
+wfs(n).fstop	   = "round";
+
+
+//-------------------------------
+ndm                = 2;
+dm = array(dms,ndm);
+
+//ndm                = 1;
+//dm = array(dms,ndm);
+
+//n  =1;
+//dm(n).type	   = "zernike"; //??
+//dm(n).nzer	   = 80;  
+//dm(n).alt          = 0.0;
+//dm(n).unitpervolt  = 0.01; //0.01;
+//dm(n).push4imat    = 100;
+//dm(n).regparam 	   = 0.1;
+//dm(n).nxact	   = wfs(n).shnxsub+1;
+//dm(n).pitch	   = wfs(n).npixpersub;
+
+n  =1;
+dm(n).type	   = "stackarray";
+dm(n).iffile	   = "";
+
+dm(n).nxact	   = wfs(n).shnxsub+1;
+dm(n).pitch	   = wfs(n).npixpersub;
+
+dm(n).alt          = 0.;
+dm(n).unitpervolt   = 0.01;
+dm(n).push4imat    = 100;
+dm(n).regtype      = "laplacian";
+
+n  =2;
+dm(n).type	   = "tiptilt";
+dm(n).iffile	   = "";
+dm(n).alt          = 0.;
+dm(n).unitpervolt   = 0.0005;
+dm(n).push4imat    = 400;
+
+dm(n).gain         = 1.;
+
+//-------------------------------
+mat.method = "mmse";
+
+//-------------------------------
+target.lambda	   = &([1.65]);
+target.xposition   = &([0.]);
+target.yposition   = &([0]);
+target.dispzoom    = &([1.]);
+
+//-------------------------------
+gs.zeropoint	   = 1.5e11;
+
+//-------------------------------
+loop.gain	   = 0.6;
+loop.framedelay    = 1;
+loop.niter	   = 1000; //5000
+loop.ittime	   = 2e-3; //2e-3
+loop.startskip     = 10;
+loop.skipevery     = 10000;
+loop.skipby        = 10000;
+loop.modalgainfile = "simulModeGains.fits";
+
+//-------------------------------
